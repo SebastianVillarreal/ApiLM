@@ -1,38 +1,49 @@
 using System.Collections;
 using System.Data.SqlClient;
 using System.Data;
-public class ChecadorDac
+using ApiLM.DataContext;
+using ApiLM.Models;
+using System;
+
+namespace ApiLM.DataContext
 {
-
-    public string GetPrecio(string pCodigo, int pSucursal)
+    public class ChecadorDac
     {
-        Checador checador =  new Checador();
-        ConexionDataAccess dac = new ConexionDataAccess();
-        ArrayList parametros = new ArrayList();
 
-        parametros.Add(new SqlParameter{ParameterName = "@pCodigo", SqlDbType = System.Data.SqlDbType.VarChar , Value = pCodigo});
-        parametros.Add(new SqlParameter{ParameterName = "@pSucursal", SqlDbType = System.Data.SqlDbType.Int , Value = pSucursal});
-        DataSet respuesta = dac.Fill("GetPrecio", parametros);
-
-        if(respuesta.Tables.Count > 0)
+        public Checador GetPrecio(string pCodigo, int pSucursal)
         {
-            foreach(DataRow item in respuesta.Tables[0].Rows)
+            Checador checador =  new Checador();
+            ConexionDataAccess dac = new ConexionDataAccess();
+            ArrayList parametros = new ArrayList();
+
+            parametros.Add(new SqlParameter{ParameterName = "@pCodigo", SqlDbType = System.Data.SqlDbType.VarChar , Value = pCodigo});
+            parametros.Add(new SqlParameter{ParameterName = "@pSucursal", SqlDbType = System.Data.SqlDbType.Int , Value = pSucursal});
+            DataSet respuesta = dac.Fill("GetPrecio", parametros);
+
+            Console.Write(respuesta);
+            if(respuesta.Tables.Count > 0)
             {
-                checador.codigo = item["Codigo"].ToString();
-                checador.descripcion = item[""].ToString();
-                checador.precio = int.Parse(item[""].ToString());
-                checador.precioOferta = int.Parse(item[""].ToString());
-                checador.fechaFin = item[""].ToString();
+                
+                foreach(DataRow item in respuesta.Tables[0].Rows)
+                {
+                    Console.Write(item["Codigo"]);
+                    checador.codigo = item["Codigo"].ToString();
+                    checador.descripcion = item["Descripcion"].ToString();
+                    checador.precio = float.Parse(item["Precio"].ToString());
+                    checador.precioOferta = float.Parse(item["PrecioOferta"].ToString());
+                    checador.fechaFin = item["FechaFin"].ToString();
 
+                }
             }
-        }
 
+            
+
+
+            return checador;
+        }
         
 
 
-        return "";
     }
-    
-
-
 }
+

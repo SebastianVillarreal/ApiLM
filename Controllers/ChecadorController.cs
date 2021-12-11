@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using ApiLM.DataContext;
+using ApiLM.Models;
 
 namespace ApiLM.Controllers
 {
@@ -12,10 +14,12 @@ namespace ApiLM.Controllers
     public class ChecadorController : ControllerBase
     {
         [HttpGet]
-        public string Get()
+        public ActionResult Get(string codigo, int sucursal)
         {
-            ConexionDataAccess dac = new ConexionDataAccess();
-            return "sebas";
+            ChecadorDac dac = new ChecadorDac();
+            Checador checador =  dac.GetPrecio(codigo, sucursal);
+            
+            return Ok(checador);
         }
     }
 }
